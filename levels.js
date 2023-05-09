@@ -1,5 +1,4 @@
 export let platforms = [
-  { x: 0, y: 550, width: canvas.width, height: 50 },
   { x: 0, y: 500, width: 150, height: 50 },
   { x: 250, y: 450, width: 150, height: 50 },
   { x: 500, y: 400, width: 150, height: 50 },
@@ -16,7 +15,6 @@ export let items = [
 
 export function initialization() {
   platforms = [
-    { x: 0, y: 550, width: canvas.width, height: 50 },
     { x: 0, y: 500, width: 150, height: 50 },
     { x: 250, y: 450, width: 150, height: 50 },
     { x: 500, y: 400, width: 150, height: 50 },
