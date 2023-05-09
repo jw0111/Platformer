@@ -12,6 +12,8 @@ playerImg.src = "./angry-birds.png";
 const itemImg = new Image();
 itemImg.src = "./holidays.png";
 
+const groundPlatform = { x: 0, y: 550, width: canvas.width, height: 50 };
+
 // 게임 오브젝트 생성
 let player = {
   x: 50,
@@ -32,10 +34,10 @@ function drawPlatforms() {
   });
   ctx.fillStyle = "brown";
   ctx.fillRect(
-    platforms[0].x,
-    platforms[0].y,
-    platforms[0].width,
-    platforms[0].height
+    groundPlatform.x,
+    groundPlatform.y,
+    groundPlatform.width,
+    groundPlatform.height
   );
 }
 
