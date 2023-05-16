@@ -1,25 +1,30 @@
 import { platforms, items, initialization } from "./levels.js";
 
+initialization();
+
 // 캔버스 설정
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = 800;
 canvas.height = 600;
+ctx.fillStyle = "#C7EEFF";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 // 이미지 로드
+const backgroundImg = new Image();
+backgroundImg.src = "./background.png";
 const playerImg = new Image();
-playerImg.src = "./angry-birds.png";
+playerImg.src = "./foxegg.png";
 const itemImg = new Image();
 itemImg.src = "./holidays.png";
 
-const groundPlatform = { x: 0, y: 550, width: canvas.width, height: 50 };
+const groundPlatform = { x: 0, y: 550, width: canvas.width, height: 30 };
 
-// 게임 오브젝트 생성
 let player = {
   x: 50,
-  y: 500,
+  y: 450,
   width: 50,
-  height: 50,
+  height: 75,
   xSpeed: 0,
   ySpeed: 0,
   jumping: false,
@@ -130,17 +135,30 @@ function resetGame() {
     jumping: false,
     grounded: true,
   };
-
+  backgroundOffset = 0;
   initialization();
 }
+
+let backgroundOffset = 0;
+const backgroundSpeed = 2;
 
 // 게임 루프
 function gameLoop() {
   // 캔버스 지우기
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // 플랫폼 그리기
-  drawPlatforms();
+  // 배경 그리기
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 배경 이미지를 반복하여 그립니다.
+  let bgX = backgroundOffset % backgroundImg.width;
+  if (bgX > 0) {
+    bgX -= backgroundImg.width;
+  }
+  while (bgX < canvas.width) {
+    ctx.drawImage(backgroundImg, bgX, 0);
+    bgX += backgroundImg.width;
+  }
 
   // 플레이어 업데이트
   player.x += player.xSpeed;
@@ -184,6 +202,15 @@ function gameLoop() {
       ctx.drawImage(itemImg, item.x, item.y, item.width, item.height);
     }
   });
+
+  // 배경 업데이트
+  backgroundOffset -= player.xSpeed;
+  if (backgroundOffset <= -backgroundImg.width) {
+    backgroundOffset = 0;
+  }
+
+  // 플랫폼 그리기
+  drawPlatforms();
 
   // 플레이어 그리기
   ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
