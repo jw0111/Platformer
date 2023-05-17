@@ -1,4 +1,4 @@
-import { platforms, items, initialization } from "./levels.js";
+import { platforms, player, items, initialization } from "./levels.js";
 
 initialization();
 
@@ -18,32 +18,19 @@ playerImg.src = "./foxegg.png";
 const itemImg = new Image();
 itemImg.src = "./holidays.png";
 
-const groundPlatform = { x: 0, y: 550, width: canvas.width, height: 30 };
-
-let player = {
-  x: 50,
-  y: 450,
-  width: 50,
-  height: 75,
-  xSpeed: 0,
-  ySpeed: 0,
-  jumping: false,
-  grounded: true,
-};
-
 function drawPlatforms() {
   // 플랫폼 그리기
-  ctx.fillStyle = "green";
   platforms.forEach((platform) => {
-    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    const platformImg = new Image();
+    platformImg.src = "./platform.png";
+    ctx.drawImage(
+      platformImg,
+      platform.x,
+      platform.y,
+      platform.width,
+      platform.height
+    );
   });
-  ctx.fillStyle = "brown";
-  ctx.fillRect(
-    groundPlatform.x,
-    groundPlatform.y,
-    groundPlatform.width,
-    groundPlatform.height
-  );
 }
 
 // 키보드 이벤트 처리
@@ -125,16 +112,6 @@ function checkPlatformCollision() {
 }
 
 function resetGame() {
-  player = {
-    x: 50,
-    y: 500,
-    width: 50,
-    height: 50,
-    xSpeed: 0,
-    ySpeed: 0,
-    jumping: false,
-    grounded: true,
-  };
   backgroundOffset = 0;
   initialization();
 }
@@ -170,8 +147,8 @@ function gameLoop() {
   }
 
   // 바닥 충돌 검사
-  if (player.y > 550 - player.height) {
-    player.y = 550 - player.height;
+  if (player.y > 600 - player.height) {
+    player.y = 600 - player.height;
     player.grounded = true;
     player.jumping = false;
     player.ySpeed = 0;
