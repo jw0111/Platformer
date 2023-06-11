@@ -4,6 +4,48 @@
     <meta charset="UTF-8" />
     <title>로그인</title>
     <link rel="stylesheet" href="style-login.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        var form = document.querySelector("form");
+        var errorElement = document.querySelector("p");
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          var email = document.getElementById("email").value;
+          var password = document.getElementById("password").value;
+
+          var data = {
+            email: email,
+            password: password,
+          };
+
+          fetch("http://localhost:8080/user/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then(function (response) {
+              return response.json();
+            })
+            .then(function (data) {
+              if (data.isSuccess) {
+                localStorage.setItem("userId", data.data);
+                window.location.href = "index.html"; // index.html로 이동
+              } else {
+                errorElement.innerText =
+                  "아이디, 비밀번호가 틀렸거나 존재하지 않습니다.";
+                errorText.style.color = "red";
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        });
+      });
+    </script>
   </head>
   <body>
     <div id="container">
