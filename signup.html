@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원가입</title>
+    <link rel="stylesheet" href="style-signup.css" />
+  </head>
+  <body>
+    <div id="navbar">
+      <div class="nav-item">
+        <a href="index.html">Home</a>
+      </div>
+      <div class="nav-item">
+        <a href="community.html">Community</a>
+      </div>
+      <div class="nav-item signup-login">
+        <a href="signup.html">회원가입</a>
+      </div>
+      <div class="nav-item signup-login signup">
+        <a href="login.html">로그인</a>
+      </div>
+    </div>
+    <div id="signupContainer">
+      <img id="bannerImg" src="banner.png" alt="Banner" />
+      <div id="signupForm">
+        <h1>회원정보 입력</h1>
+        <form>
+          <table>
+            <tr>
+              <td>이름</td>
+              <td><input type="text" name="name" size="60" /></td>
+            </tr>
+            <tr>
+              <td>이메일</td>
+              <td><input type="email" name="email" /></td>
+            </tr>
+            <tr>
+              <td>비밀번호</td>
+              <td><input type="password" name="password" /></td>
+            </tr>
+            <tr>
+              <td>비밀번호 확인</td>
+              <td><input type="password" name="confirm-password" /></td>
+            </tr>
+          </table>
+          <button type="submit">가입하기</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

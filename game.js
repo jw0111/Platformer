@@ -16,7 +16,7 @@ backgroundImg.src = "./background.png";
 const playerImg = new Image();
 playerImg.src = "./foxegg.png";
 const itemImg = new Image();
-itemImg.src = "./holidays.png";
+itemImg.src = "./item.png";
 
 function drawPlatforms() {
   // 플랫폼 그리기

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>커뮤니티</title>
+    <link rel="stylesheet" href="style-community.css" />
+    <script>
+      function viewPostDetail() {
+        window.location.href = "community-detail.html";
+      }
+    </script>
+  </head>
+  <body>
+    <div id="navbar">
+      <div class="nav-item">
+        <a href="index.html">Home</a>
+      </div>
+      <div class="nav-item">
+        <a href="community.html">Community</a>
+      </div>
+      <div class="nav-item signup-login">
+        <a href="signup.html">회원가입</a>
+      </div>
+      <div class="nav-item signup-login signup">
+        <a href="login.html">로그인</a>
+      </div>
+    </div>
+    <div id="community">
+      <img id="bannerImg" src="banner.png" alt="Banner" />
+      <div id="board">
+        <table>
+          <thead>
+            <tr>
+              <th>Num</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 게시글 목록이 여기에 추가됩니다 -->
+            <tr onclick="viewPostDetail()">
+              <td>4</td>
+              <td>제목</td>
+              <td>이더</td>
+              <td>2023.06.11</td>
+            </tr>
+            <tr onclick="viewPostDetail()">
+              <td>3</td>
+              <td>제목</td>
+              <td>코트</td>
+              <td>2023.06.11</td>
+            </tr>
+            <tr onclick="viewPostDetail()">
+              <td>2</td>
+              <td>제목제목제목제목</td>
+              <td>제트</td>
+              <td>2023.06.11</td>
+            </tr>
+            <tr onclick="viewPostDetail()">
+              <td>1</td>
+              <td>제모오오오오옹</td>
+              <td>아가사</td>
+              <td>2023.06.11</td>
+            </tr>
+          </tbody>
+        </table>
+        <button id="writeButton">글쓰기</button>
+      </div>
+    </div>
+  </body>
+</html>

@@ -2,74 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Platformer Game</title>
-    <style>
-      body {
-        background-color: #c7eeff;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-      }
-
-      #gameContainer {
-        position: relative;
-        width: 100%;
-        height: 100%;
-      }
-
-      #gameCanvas {
-        position: absolute;
-        top: 120%;
-        left: 50%;
-        transform: translate(-50%, -70%);
-        z-index: 1;
-        pointer-events: none;
-      }
-
-      #bannerImg {
-        width: 100%;
-        height: auto;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 0;
-      }
-
-      /* 네비게이션 바 스타일 */
-      #navbar {
-        position: fixed;
-        top: 10px;
-        left: 0;
-        width: 100%;
-        background-color: rgba(255, 255, 255, 0);
-        padding: 10px 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2;
-      }
-
-      .nav-item {
-        margin: 0 20px;
-      }
-
-      .nav-item a {
-        text-decoration: none;
-        font-size: 30px;
-        color: #ffffff;
-        padding: 5px;
-        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
-          sans-serif;
-      }
-
-      .nav-item a:hover {
-        border: 5px solid #ffffff;
-        padding: 10px;
-        border-radius: 40%;
-      }
-    </style>
+    <title>Bobble Jump</title>
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div id="navbar">
@@ -78,6 +12,12 @@
       </div>
       <div class="nav-item">
         <a href="community.html">Community</a>
+      </div>
+      <div class="nav-item signup-login">
+        <a href="signup.html">회원가입</a>
+      </div>
+      <div class="nav-item signup-login signup">
+        <a href="login.html">로그인</a>
       </div>
     </div>
 

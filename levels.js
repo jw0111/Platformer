@@ -26,10 +26,10 @@ export function initialization() {
 
   items = platforms.map((platform, index) => {
     return {
-      x: platform.x + (platform.width - 50) / 2,
-      y: platform.y - 60,
-      width: 50,
-      height: 50,
+      x: platform.x + (platform.width - 35) / 2,
+      y: platform.y - 50,
+      width: 35,
+      height: 35,
       taken: false,
     };
   });

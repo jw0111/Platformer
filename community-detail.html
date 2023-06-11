@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>게시글 자세히 보기</title>
+    <link rel="stylesheet" href="style-community-detail.css" />
+    <script>
+      function viewPosts() {
+        window.location.href = "community.html";
+      }
+    </script>
+  </head>
+  <body>
+    <div id="navbar">
+      <div class="nav-item">
+        <a href="index.html">Home</a>
+      </div>
+      <div class="nav-item">
+        <a href="community.html">Community</a>
+      </div>
+      <div class="nav-item signup-login">
+        <a href="signup.html">회원가입</a>
+      </div>
+      <div class="nav-item signup-login signup">
+        <a href="login.html">로그인</a>
+      </div>
+    </div>
+    <div id="postDetail">
+      <img id="bannerImg" src="banner.png" alt="Banner" />
+      <div id="window">
+        <h1>이것은 제목입니다</h1>
+        <div class="meta-info">
+          <span class="author">이더</span>
+          <span class="date">2023.06.11</span>
+        </div>
+        <div class="content">
+          <p>게시글 내용/...12시 안에 끝낼 수 있겟죠? 아주 불안하네요</p>
+          <p>asfdgsf</p>
+        </div>
+        <div class="actions">
+          <button id="likeButton">하트</button>
+          <button id="likeButton" onclick="viewPosts()">글목록</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
