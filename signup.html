@@ -24,7 +24,7 @@
       <img id="bannerImg" src="banner.png" alt="Banner" />
       <div id="signupForm">
         <h1>회원정보 입력</h1>
-        <form>
+        <form id="registerForm">
           <table>
             <tr>
               <td>이름</td>
@@ -44,8 +44,50 @@
             </tr>
           </table>
           <button type="submit">가입하기</button>
+          <p id="errorText"></p>
         </form>
       </div>
     </div>
+
+    <script>
+      const registerForm = document.getElementById("registerForm");
+      const errorText = document.getElementById("errorText");
+
+      registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const name = document.getElementsByName("name")[0].value;
+        const email = document.getElementsByName("email")[0].value;
+        const password = document.getElementsByName("password")[0].value;
+        const confirmPassword =
+          document.getElementsByName("confirm-password")[0].value;
+
+        if (password !== confirmPassword) {
+          errorText.textContent = "비밀번호가 일치하지 않습니다.";
+          errorText.style.color = "red";
+          return;
+        }
+
+        const response = await fetch("http://localhost:8080/user/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userName: name,
+            userEmail: email,
+            userPwd: password,
+          }),
+        });
+
+        if (response.ok) {
+          window.location.href = "login.html";
+        } else {
+          const data = await response.json();
+          errorText.textContent = data.message;
+          errorText.style.color = "red";
+        }
+      });
+    </script>
   </body>
 </html>

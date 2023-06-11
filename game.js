@@ -34,7 +34,7 @@ function drawPlatforms() {
 }
 
 // 키보드 이벤트 처리
-document.addEventListener("keydown", (event) => {
+function handleKeyDown(event) {
   switch (event.code) {
     case "ArrowLeft":
       player.xSpeed = -10;
@@ -51,16 +51,19 @@ document.addEventListener("keydown", (event) => {
       }
       break;
   }
-});
+}
 
-document.addEventListener("keyup", (event) => {
+function handleKeyUp(event) {
   switch (event.code) {
     case "ArrowLeft":
     case "ArrowRight":
       player.xSpeed = 0;
       break;
   }
-});
+}
+
+document.addEventListener("keydown", handleKeyDown);
+document.addEventListener("keyup", handleKeyUp);
 
 function collisionCheck(rect1, rect2) {
   return (
@@ -112,12 +115,71 @@ function checkPlatformCollision() {
 }
 
 function resetGame() {
-  backgroundOffset = 0;
+  sendScoreToServer(score);
+  clearInterval(gameInterval); // 게임 루프 중지
   initialization();
+  score = 0;
+  backgroundOffset = 0;
+  player.x = 50;
+  player.y = 50;
+  gameInterval = setInterval(gameLoop, 1000 / 60); // 게임 루프 다시 시작
 }
 
 let backgroundOffset = 0;
 const backgroundSpeed = 2;
+
+// HTML에 score를 표시할 요소 추가
+const scoreElement = document.createElement("div");
+scoreElement.id = "score";
+canvas.parentNode.appendChild(scoreElement);
+
+// CSS를 사용하여 점수 요소의 위치 설정
+scoreElement.style.position = "absolute";
+scoreElement.style.top = "1%";
+scoreElement.style.right = "1%";
+scoreElement.style.padding = "10px";
+scoreElement.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+scoreElement.style.color = "#ffffff";
+scoreElement.style.fontFamily = "Arial, sans-serif";
+scoreElement.style.fontSize = "16px";
+scoreElement.style.zIndex = "999";
+
+// 획득한 아이템 개수 변수 추가
+let score = 0;
+
+// 게임 종료 시 score를 서버에 전송하는 함수
+function sendScoreToServer(score) {
+  const userId = localStorage.getItem("userId"); // LocalStorage에서 userId 가져오기
+  const url = `http://localhost:8080/user/score/${userId}/${score}`;
+  fetch(url, { method: "POST" })
+    .then((response) => {
+      if (response.ok) {
+        console.log("Score sent successfully");
+      } else {
+        console.log("Failed to send score");
+      }
+    })
+    .catch((error) => {
+      console.log("Error:", error);
+    });
+}
+
+// 게임 오버 시 처리 함수
+function handleGameOver() {
+  clearInterval(gameInterval); // 게임 루프 중지
+  if (confirm("게임 오버! 게임을 다시 시작하시겠습니까?")) {
+    resetGame(); // 게임 재시작
+  } else {
+    sendScoreToServer(score); // score를 서버에 전송
+  }
+}
+
+// 게임 종료 시 처리 함수
+function handleGameEnd() {
+  clearInterval(gameInterval); // 게임 루프 중지
+  alert("게임 클리어!");
+  sendScoreToServer(score); // score를 서버에 전송
+}
 
 // 게임 루프
 function gameLoop() {
@@ -152,8 +214,8 @@ function gameLoop() {
     player.grounded = true;
     player.jumping = false;
     player.ySpeed = 0;
-    alert("게임 오버! 게임을 다시 시작하세요");
-    resetGame();
+    handleGameOver(); // 게임 오버 처리
+    return;
   }
 
   // 벽 충돌 검사
@@ -167,6 +229,7 @@ function gameLoop() {
   for (let i = 0; i < items.length; i++) {
     if (!items[i].taken && collisionCheck(player, items[i])) {
       items[i].taken = true;
+      score++; // 아이템을 먹었으므로 score 증가
     }
   }
 
@@ -192,14 +255,16 @@ function gameLoop() {
   // 플레이어 그리기
   ctx.drawImage(playerImg, player.x, player.y, player.width, player.height);
 
+  // score 업데이트
+  scoreElement.textContent = `score: ${score}`;
+
   // 아이템을 모두 먹었는지 확인
   const allItemsTaken = items.every((item) => item.taken);
   if (allItemsTaken) {
     // 게임 종료
-    clearInterval(gameInterval);
-    alert("You win!");
+    handleGameEnd(); // 게임 종료 처리
   }
 }
 
 // 게임 루프 실행
-const gameInterval = setInterval(gameLoop, 1000 / 60);
+let gameInterval = setInterval(gameLoop, 1000 / 60);

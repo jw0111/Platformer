@@ -13,7 +13,7 @@ body {
   height: 100%;
 }
 
-#gameCanvas {
+#gameBoard {
   position: absolute;
   top: 90%;
   left: 50%;

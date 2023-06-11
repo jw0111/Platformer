@@ -8,6 +8,97 @@
       function viewPosts() {
         window.location.href = "community.html";
       }
+
+      // 게시글 정보 가져오기
+      var postId = getPostIdFromURL(); // URL에서 postId 가져오기
+      var userId = localStorage.getItem("userId"); // 로컬 스토리지에서 userId 가져오기
+
+      var url = "http://localhost:8080/post/load/" + postId + "/" + userId;
+      fetch(url)
+        .then(function (response) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Failed to load post detail.");
+          }
+        })
+        .then(function (response) {
+          var data = response.data;
+
+          var title = document.querySelector("h1");
+          title.textContent = data.title;
+
+          var content = document.querySelector(".content p");
+          content.textContent = data.content;
+
+          var author = document.querySelector(".author");
+          author.textContent = data.userName;
+
+          var date = document.querySelector(".date");
+          var createdAt = new Date(data.createdAt);
+          var formattedDate = createdAt.toISOString().split("T")[0];
+          date.textContent = formattedDate;
+
+          var heartCount = document.querySelector("#heartCount");
+          heartCount.textContent = "하트 수 : " + data.heartCnt;
+
+          var likeButton = document.querySelector("#likeButton");
+          if (data.hearted) {
+            likeButton.innerHTML = '<img src="_heart.png" alt="Heart" />';
+          } else {
+            likeButton.innerHTML = '<img src="heart.png" alt="Heart" />';
+          }
+
+          // 하트 버튼 클릭 시 동작
+          likeButton.addEventListener("click", function () {
+            var likeUrl =
+              "http://localhost:8080/hearts/like/" + userId + "/" + postId;
+            if (data.hearted) {
+              // 이미 좋아요 상태인 경우, 좋아요 취소 요청
+              fetch(likeUrl, { method: "DELETE" })
+                .then(function (response) {
+                  if (response.ok) {
+                    return response.json();
+                  } else {
+                    throw new Error("Failed to unlike the post.");
+                  }
+                })
+                .then(function () {
+                  // 페이지 새로고침
+                  location.reload();
+                })
+                .catch(function (error) {
+                  console.log("Error:", error);
+                });
+            } else {
+              // 좋아요 상태가 아닌 경우, 좋아요 요청
+              fetch(likeUrl, { method: "POST" })
+                .then(function (response) {
+                  if (response.ok) {
+                    return response.json();
+                  } else {
+                    throw new Error("Failed to like the post.");
+                  }
+                })
+                .then(function () {
+                  // 페이지 새로고침
+                  location.reload();
+                })
+                .catch(function (error) {
+                  console.log("Error:", error);
+                });
+            }
+          });
+        })
+        .catch(function (error) {
+          console.log("Error:", error);
+        });
+
+      // URL에서 postId 파라미터 가져오기
+      function getPostIdFromURL() {
+        var urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get("postId");
+      }
     </script>
   </head>
   <body>
@@ -28,17 +119,17 @@
     <div id="postDetail">
       <img id="bannerImg" src="banner.png" alt="Banner" />
       <div id="window">
-        <h1>이것은 제목입니다</h1>
+        <h1>게시글 제목</h1>
         <div class="meta-info">
-          <span class="author">이더</span>
-          <span class="date">2023.06.11</span>
+          <span class="author">작성자</span>
+          <span class="date">2023-06-11</span>
         </div>
         <div class="content">
-          <p>게시글 내용/...12시 안에 끝낼 수 있겟죠? 아주 불안하네요</p>
-          <p>asfdgsf</p>
+          <p>게시글 내용</p>
         </div>
         <div class="actions">
-          <button id="likeButton">하트</button>
+          <button id="likeButton"></button>
+          <span id="heartCount">하트 수 : </span>
           <button id="likeButton" onclick="viewPosts()">글목록</button>
         </div>
       </div>

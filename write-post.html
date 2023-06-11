@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>글 작성</title>
+    <link rel="stylesheet" href="style-write-post.css" />
+    <script>
+      // 작성자 정보 가져오기
+      var userId = localStorage.getItem("userId");
+      var userUrl = "http://localhost:8080/user/load/" + userId;
+
+      console.log("Fetching user data...");
+      var authorInput; // authorInput 변수를 함수 외부에서 선언
+
+      fetch(userUrl)
+        .then(function (response) {
+          if (response.ok) {
+            console.log("User data fetched successfully.");
+            return response.json();
+          } else {
+            throw new Error("Failed to load user.");
+          }
+        })
+        .then(function (responseData) {
+          var userData = responseData.data;
+          console.log("User data:", userData);
+          authorInput = document.getElementById("author"); // authorInput 변수에 할당
+          if (authorInput) {
+            authorInput.value = userData.username;
+          } else {
+            throw new Error("Failed to find author input field.");
+          }
+        })
+        .catch(function (error) {
+          console.log("Error:", error);
+        });
+
+      function uploadPost() {
+        var title = document.getElementById("title").value;
+        var content = document.getElementById("content").value;
+
+        // authorInput 변수가 정의되지 않았을 경우에 대한 예외 처리
+        if (!authorInput) {
+          console.log("Failed to find author input field.");
+          return;
+        }
+
+        var userId = localStorage.getItem("userId");
+        var url = "http://localhost:8080/post/upload/" + userId;
+        var data = { title: title, content: content };
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then(function (response) {
+            if (response.ok) {
+              window.location.href = "community.html";
+            } else {
+              console.log("Failed to upload post.");
+            }
+          })
+          .catch(function (error) {
+            console.log("Error:", error);
+          });
+      }
+
+      function uploadPost() {
+        var title = document.getElementById("title").value;
+        var content = document.getElementById("content").value;
+        var author = authorInput.value;
+
+        // 로컬 스토리지에서 userId 가져오기
+        var userId = localStorage.getItem("userId");
+
+        var url = "http://localhost:8080/post/upload/" + userId;
+        var data = { title: title, content: content, author: author };
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then(function (response) {
+            if (response.ok) {
+              window.location.href = "community.html";
+            } else {
+              console.log("Failed to upload post.");
+            }
+          })
+          .catch(function (error) {
+            console.log("Error:", error);
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <div id="navbar">
+      <div class="nav-item">
+        <a href="index.html">Home</a>
+      </div>
+      <div class="nav-item">
+        <a href="community.html">Community</a>
+      </div>
+      <div class="nav-item signup-login">
+        <a href="signup.html">회원가입</a>
+      </div>
+      <div class="nav-item signup-login signup">
+        <a href="login.html">로그인</a>
+      </div>
+    </div>
+    <div id="writePostContainer">
+      <img id="bannerImg" src="banner.png" alt="Banner" />
+      <board>
+        <h1>글 작성</h1>
+        <form>
+          <label for="title">제목</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="제목을 입력하세요."
+          />
+          <label for="author">작성자</label>
+          <input
+            type="text"
+            id="author"
+            name="author"
+            disabled
+            value="Loading..."
+          />
+          <label for="content">내용</label>
+          <textarea
+            id="content"
+            name="content"
+            style="width: 100%; height: 300px"
+            placeholder="게시글 내용을 입력하세요."
+          ></textarea>
+          <button type="button" onclick="uploadPost()">작성 완료</button>
+        </form>
+      </board>
+    </div>
+  </body>
+</html>

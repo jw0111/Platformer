@@ -5,9 +5,65 @@
     <title>커뮤니티</title>
     <link rel="stylesheet" href="style-community.css" />
     <script>
-      function viewPostDetail() {
-        window.location.href = "community-detail.html";
+      function viewPostDetail(postId) {
+        window.location.href = "community-detail.html?postId=" + postId;
       }
+
+      function writePost() {
+        window.location.href = "write-post.html";
+      }
+
+      // 게시글 목록 가져오기
+      var url = "http://localhost:8080/post/loadAll";
+      fetch(url)
+        .then(function (response) {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error("Failed to load post list.");
+          }
+        })
+        .then(function (response) {
+          var data = response.data;
+          if (!Array.isArray(data)) {
+            throw new Error("Invalid data format.");
+          }
+
+          var tbody = document.querySelector("#board table tbody");
+          tbody.innerHTML = ""; // 기존 내용 비우기
+
+          data.forEach(function (post) {
+            var row = document.createElement("tr");
+
+            var numCell = document.createElement("td");
+            numCell.textContent = post.postId;
+            row.appendChild(numCell);
+
+            var titleCell = document.createElement("td");
+            titleCell.textContent = post.title;
+            row.appendChild(titleCell);
+
+            var authorCell = document.createElement("td");
+            authorCell.textContent = post.userName;
+            row.appendChild(authorCell);
+
+            var dateCell = document.createElement("td");
+            var createdAt = new Date(post.createdAt);
+            var formattedDate = createdAt.toISOString().split("T")[0];
+            dateCell.textContent = formattedDate;
+            row.appendChild(dateCell);
+
+            row.addEventListener("click", function () {
+              // 게시글 상세 페이지로 이동
+              viewPostDetail(post.postId);
+            });
+
+            tbody.appendChild(row);
+          });
+        })
+        .catch(function (error) {
+          console.log("Error:", error);
+        });
     </script>
   </head>
   <body>
@@ -39,33 +95,9 @@
           </thead>
           <tbody>
             <!-- 게시글 목록이 여기에 추가됩니다 -->
-            <tr onclick="viewPostDetail()">
-              <td>4</td>
-              <td>제목</td>
-              <td>이더</td>
-              <td>2023.06.11</td>
-            </tr>
-            <tr onclick="viewPostDetail()">
-              <td>3</td>
-              <td>제목</td>
-              <td>코트</td>
-              <td>2023.06.11</td>
-            </tr>
-            <tr onclick="viewPostDetail()">
-              <td>2</td>
-              <td>제목제목제목제목</td>
-              <td>제트</td>
-              <td>2023.06.11</td>
-            </tr>
-            <tr onclick="viewPostDetail()">
-              <td>1</td>
-              <td>제모오오오오옹</td>
-              <td>아가사</td>
-              <td>2023.06.11</td>
-            </tr>
           </tbody>
         </table>
-        <button id="writeButton">글쓰기</button>
+        <button id="writeButton" onclick="writePost()">글쓰기</button>
       </div>
     </div>
   </body>
