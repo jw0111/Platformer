@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Admin 페이지</title>
+    <link rel="stylesheet" type="text/css" href="style-admin.css" />
+    <script>
+      // 게시글 삭제 함수
+      function deletePost(postId) {
+        if (confirm("게시글을 삭제하시겠습니까?")) {
+          var url = "http://localhost:8080/post/delete/" + postId;
+          fetch(url, {
+            method: "DELETE",
+          })
+            .then(function (response) {
+              if (response.ok) {
+                console.log("게시글이 삭제되었습니다.");
+                // 삭제 후, 게시글 목록 다시 로드
+                loadPostList();
+              } else {
+                throw new Error("Failed to delete post.");
+              }
+            })
+            .catch(function (error) {
+              console.log("Error:", error);
+            });
+        }
+      }
+
+      // 게시글 목록 가져오기
+      function loadPostList() {
+        var url = "http://localhost:8080/post/loadAll";
+        fetch(url)
+          .then(function (response) {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error("Failed to load post list.");
+            }
+          })
+          .then(function (response) {
+            var data = response.data;
+            if (!Array.isArray(data)) {
+              throw new Error("Invalid data format.");
+            }
+
+            var tbody = document.querySelector("table tbody");
+            tbody.innerHTML = ""; // 기존 내용 비우기
+
+            data.forEach(function (post) {
+              var row = document.createElement("tr");
+
+              var numCell = document.createElement("td");
+              numCell.textContent = post.postId;
+              row.appendChild(numCell);
+
+              var titleCell = document.createElement("td");
+              titleCell.textContent = post.title;
+              row.appendChild(titleCell);
+
+              var authorCell = document.createElement("td");
+              authorCell.textContent = post.userName;
+              row.appendChild(authorCell);
+
+              var dateCell = document.createElement("td");
+              var createdAt = new Date(post.createdAt);
+              var formattedDate = createdAt.toISOString().split("T")[0];
+              dateCell.textContent = formattedDate;
+              row.appendChild(dateCell);
+
+              // 삭제 버튼 추가
+              var deleteButtonCell = document.createElement("td");
+              var deleteButton = document.createElement("img");
+              deleteButton.src = "bin.png";
+              deleteButton.alt = "Delete";
+              deleteButton.addEventListener("click", function (event) {
+                event.stopPropagation(); // 이벤트 버블링 방지
+                deletePost(post.postId);
+              });
+              deleteButtonCell.appendChild(deleteButton);
+              row.appendChild(deleteButtonCell);
+
+              tbody.appendChild(row);
+            });
+          })
+          .catch(function (error) {
+            console.log("Error:", error);
+          });
+      }
+
+      // 페이지 로드 시 게시글 목록 로드
+      window.addEventListener("DOMContentLoaded", loadPostList);
+    </script>
+  </head>
+  <body>
+    <div id="navigation">
+      <div id="banner">
+        <img src="banner.png" alt="Banner" />
+      </div>
+      <ul id="menu">
+        <li><a href="./admin-db.html">Database</a></li>
+        <li class="active"><a href="#">Community</a></li>
+      </ul>
+    </div>
+    <div id="content">
+      <h1>Community</h1>
+      <table id="posts">
+        <thead>
+          <tr>
+            <th>Num</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Date</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 게시글 목록이 여기에 추가됩니다 -->
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

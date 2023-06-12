@@ -33,7 +33,16 @@
             .then(function (data) {
               if (data.isSuccess) {
                 localStorage.setItem("userId", data.data);
-                window.location.href = "index.html"; // index.html로 이동
+
+                // email과 password 확인
+                if (
+                  email === "admin@email.com" &&
+                  password === "InternetProgramming"
+                ) {
+                  window.location.href = "admin-db.html"; // admin-db.html로 이동
+                } else {
+                  window.location.href = "index.html"; // index.html로 이동
+                }
               } else {
                 errorElement.innerText =
                   "아이디, 비밀번호가 틀렸거나 존재하지 않습니다.";
